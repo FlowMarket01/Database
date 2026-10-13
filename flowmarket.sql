@@ -211,3 +211,14 @@ CREATE TABLE estadoFila (
     CONSTRAINT chkFimAposInicio CHECK (fim IS NULL OR fim >= inicio),
     CONSTRAINT chkNivel check (nivel in ("vazio","moderado","cheio"))
 );
+INSERT INTO estadoFila (idCaixa, nivel, inicio, fim) VALUES 
+(1, 'vazio', '2026-06-01 08:30:00', '2026-06-01 08:35:00'),
+(1, 'moderado', '2026-06-01 08:40:00', '2026-06-01 08:45:00'),
+(2, 'vazio', '2026-06-01 08:50:00', '2026-06-01 08:55:00'),
+(2, 'moderado', '2026-06-01 09:00:00', '2026-06-01 09:05:00'),
+(1, 'cheio', '2026-06-01 09:10:00', '2026-06-01 09:15:00'),
+(3, 'vazio', '2026-06-01 09:20:00', '2026-06-01 09:25:00'),
+(3, 'moderado', '2026-06-01 09:30:00', '2026-06-01 09:35:00'),
+(4, 'cheio', '2026-06-01 09:40:00', '2026-06-01 09:45:00'),
+(5, 'vazio', '2026-06-01 09:50:00', '2026-06-01 09:55:00'),
+(5, 'moderado', '2026-06-01 10:00:00', NULL);
