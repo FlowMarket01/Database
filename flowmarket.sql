@@ -222,3 +222,67 @@ INSERT INTO estadoFila (idCaixa, nivel, inicio, fim) VALUES
 (4, 'cheio', '2026-06-01 09:40:00', '2026-06-01 09:45:00'),
 (5, 'vazio', '2026-06-01 09:50:00', '2026-06-01 09:55:00'),
 (5, 'moderado', '2026-06-01 10:00:00', NULL);
+
+
+SELECT 
+estadoFila.idCaixa, 
+caixa.identificacao, 
+estadoFila.nivel,
+CASE
+WHEN nivel = "cheio" THEN concat(caixa.identificacao," ", estadoFila.nivel,
+ ' com alto número de clientes. Recomendamos distribuir para o ', 
+ 
+ (SELECT caixa2.identificacao 
+ FROM estadoFila AS estadoFila2 
+ JOIN caixa AS caixa2 
+ ON estadoFila2.idCaixa = caixa2.idCaixa 
+ WHERE estadoFila2.nivel = "vazio" AND estadoFila2.inicio > '2026-06-01 09:39:00'))
+ 
+ELSE NULL
+end as ALERTA
+FROM estadoFila
+JOIN caixa
+ON estadoFila.idCaixa = caixa.idCaixa
+WHERE estadoFila.inicio > '2026-06-01 09:39:0';
+
+SELECT 
+MIN(dataLeitura) 'Início',
+MAX(dataLeitura) 'Fim do período',
+COUNT(*) AS 'Movimentação na linha de caixas',
+CASE 
+WHEN COUNT(*) > 5 THEN 'movimento acima da média'
+WHEN COUNT(*) > 4 THEN 'movimento médio'
+ELSE 'Movimento lento'
+END 'Análise do período'
+FROM leituraRegiaoFila
+WHERE presenca <> 0;
+
+SELECT
+ concat(AVG(presenca), corredor.identificacao) AS "Movimentação média"
+FROM leituraCorredor 
+join sensor 
+ON leituraCorredor.fk_idSensor = sensor.idSensor 
+JOIN corredor
+ON sensor.fk_idCorredor = corredor.idCorredor
+WHERE fk_idSensor = "9"; 
+
+
+  SELECT 
+AVG(presenca) AS "Movimentação média", 
+corredor.identificacao AS 'Corredor'
+FROM leituraCorredor 
+JOIN sensor ON leituraCorredor.fk_idSensor = sensor.idSensor 
+JOIN corredor ON sensor.fk_idCorredor = corredor.idCorredor 
+WHERE fk_idSensor = "9";
+
+SELECT 
+corredor.identificacao AS corredor,
+count(*) AS "total de movimentação",
+MIN(dataLeitura) AS 'Primeira movimentação detectada',
+MAX(dataLeitura) AS 'Última movimentação detectada' 
+FROM leituraCorredor
+JOIN sensor
+ ON leituraCorredor.fk_idSensor = sensor.idSensor
+ JOIN corredor 
+ ON sensor.fk_idCorredor = corredor.idCorredor
+WHERE presenca <> 0 AND fk_idSensor = '10';
