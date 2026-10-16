@@ -224,10 +224,13 @@ INSERT INTO estadoFila (idCaixa, nivel, inicio, fim) VALUES
 (5, 'moderado', '2026-06-01 10:00:00', NULL);
 
 
+
 SELECT 
 estadoFila.idCaixa, 
 caixa.identificacao, 
-estadoFila.nivel,
+estadoFila.inicio 'Primeira leitura',
+estadoFila.fim 'Última leitura',
+estadoFila.nivel 'Nível da fila',
 CASE
 WHEN nivel = "cheio" THEN concat(caixa.identificacao," ", estadoFila.nivel,
  ' com alto número de clientes. Recomendamos distribuir para o ', 
@@ -241,52 +244,57 @@ end as ALERTA
 FROM estadoFila
 JOIN caixa
 ON estadoFila.idCaixa = caixa.idCaixa
-WHERE estadoFila.inicio > '2026-06-01 09:39:0'; -- está na dash grafico inferior direito (caixa)
+WHERE estadoFila.inicio > '2026-06-01 09:39:0';
+
+
 
 SELECT 
-MIN(dataLeitura) 'Início',
-MAX(dataLeitura) 'Fim do período',
-COUNT(*) AS 'Movimentação na linha de caixas',
-CASE 
-WHEN COUNT(*) > 5 THEN 'movimento acima da média'
-WHEN COUNT(*) > 4 THEN 'movimento médio'
-ELSE 'Movimento lento'
-END 'Análise do período'
-FROM leituraRegiaoFila
-<<<<<<< HEAD
-WHERE presenca <> 0;
--- FAZER SELECT DO número individual por caixas 
--- linha cinza
-=======
-WHERE presenca <> 0; -- não consegui encontrar na dash 
+estadoFila.idCaixa, 
+caixa.identificacao, 
+estadoFila.inicio 'Primeira leitura',
+estadoFila.fim 'Última leitura',
+estadoFila.nivel 
+FROM estadoFila
+JOIN caixa
+ON estadoFila.idCaixa = caixa.idCaixa 
+WHERE estadoFila.idCaixa =1
+ORDER BY estadoFila.nivel;
 
->>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
+SELECT 
+estadoFila.idCaixa, 
+caixa.identificacao, 
+estadoFila.inicio 'Primeira leitura',
+estadoFila.fim 'Última leitura',
+estadoFila.nivel 
+FROM estadoFila
+JOIN caixa
+ON estadoFila.idCaixa = caixa.idCaixa 
+ORDER BY estadoFila.nivel;
+
+-- Gráfico canto inferior esquerdo
 SELECT
- concat(AVG(presenca), corredor.identificacao) AS "Movimentação média"
-FROM leituraCorredor 
-join sensor 
-ON leituraCorredor.fk_idSensor = sensor.idSensor 
-JOIN corredor
-ON sensor.fk_idCorredor = corredor.idCorredor
-WHERE fk_idSensor = "9";  -- está na dash mas a concatenação está incorreta (corredor)
+caixa.identificacao 'CAIXA',
+estadoFila.inicio "Primeira leitura",
+estadoFila.fim "Última leitura"
+FROM caixa
+JOIN estadoFila
+ON estadoFila.idCaixa = caixa.idCaixa
+WHERE estadoFila.nivel = 'cheio';
 
+SELECT
+estadoFila.inicio "Primeira leitura",
+estadoFila.fim "Última leitura",
+estadoFila.nivel Nível,
+caixa.identificacao 'CAIXA'
+FROM caixa
+JOIN estadoFila
+ON estadoFila.idCaixa = caixa.idCaixa
+ORDER BY estadoFila.nivel;
 
-  SELECT 
-AVG(presenca) AS "Movimentação média", 
-corredor.identificacao AS 'Corredor'
-FROM leituraCorredor 
-JOIN sensor ON leituraCorredor.fk_idSensor = sensor.idSensor 
-JOIN corredor ON sensor.fk_idCorredor = corredor.idCorredor 
-<<<<<<< HEAD
-WHERE fk_idSensor = "9";
--- linha cinza
-=======
-WHERE fk_idSensor = "9"; -- precisa ser discutido média não se encaixa no contexto da dash 
->>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
-
+-- CORREDOR COM MAIOR FLUXO SUPERIOR ESQUERDO
 SELECT 
 corredor.identificacao AS corredor,
-count(*) AS "total de movimentação",
+COUNT(*) AS "total de movimentação",
 MIN(dataLeitura) AS 'Primeira movimentação detectada',
 MAX(dataLeitura) AS 'Última movimentação detectada' 
 FROM leituraCorredor
@@ -294,9 +302,19 @@ JOIN sensor
  ON leituraCorredor.fk_idSensor = sensor.idSensor
  JOIN corredor 
  ON sensor.fk_idCorredor = corredor.idCorredor
-<<<<<<< HEAD
-WHERE presenca <> 0 AND fk_idSensor = '10';
+WHERE presenca <> 0 AND fk_idSensor = '9';
 
-=======
-WHERE presenca <> 0 AND fk_idSensor = '10'; -- está na dash grafico superior direito (corredor)
->>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
+
+-- PICO DE FLUXO POR CORREDOR SUPERIOR DIREITO
+SELECT 
+leituraCorredor.dataLeitura 'Momento da leitura',
+sensor.identificacao 'Sensor',
+corredor.identificacao 'Corredor',
+leituraCorredor.presenca'Presenca'
+FROM leituraCorredor
+JOIN sensor
+ON leituraCorredor.fk_idSensor = sensor.idSensor
+JOIN corredor
+ON sensor.fk_idCorredor = corredor.idCorredor
+WHERE idCorredor = 1
+ORDER BY dataLeitura ;
