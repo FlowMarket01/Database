@@ -231,13 +231,11 @@ estadoFila.nivel,
 CASE
 WHEN nivel = "cheio" THEN concat(caixa.identificacao," ", estadoFila.nivel,
  ' com alto número de clientes. Recomendamos distribuir para o ', 
- 
- (SELECT caixa2.identificacao 
+  (SELECT caixa2.identificacao 
  FROM estadoFila AS estadoFila2 
  JOIN caixa AS caixa2 
  ON estadoFila2.idCaixa = caixa2.idCaixa 
  WHERE estadoFila2.nivel = "vazio" AND estadoFila2.inicio > '2026-06-01 09:39:00'))
- 
 ELSE NULL
 end as ALERTA
 FROM estadoFila
@@ -256,7 +254,8 @@ ELSE 'Movimento lento'
 END 'Análise do período'
 FROM leituraRegiaoFila
 WHERE presenca <> 0;
-
+-- FAZER SELECT DO número individual por caixas 
+-- linha cinza
 SELECT
  concat(AVG(presenca), corredor.identificacao) AS "Movimentação média"
 FROM leituraCorredor 
@@ -274,6 +273,7 @@ FROM leituraCorredor
 JOIN sensor ON leituraCorredor.fk_idSensor = sensor.idSensor 
 JOIN corredor ON sensor.fk_idCorredor = corredor.idCorredor 
 WHERE fk_idSensor = "9";
+-- linha cinza
 
 SELECT 
 corredor.identificacao AS corredor,
@@ -286,3 +286,4 @@ JOIN sensor
  JOIN corredor 
  ON sensor.fk_idCorredor = corredor.idCorredor
 WHERE presenca <> 0 AND fk_idSensor = '10';
+
