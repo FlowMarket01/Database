@@ -241,7 +241,7 @@ end as ALERTA
 FROM estadoFila
 JOIN caixa
 ON estadoFila.idCaixa = caixa.idCaixa
-WHERE estadoFila.inicio > '2026-06-01 09:39:0';
+WHERE estadoFila.inicio > '2026-06-01 09:39:0'; -- está na dash grafico inferior direito (caixa)
 
 SELECT 
 MIN(dataLeitura) 'Início',
@@ -253,9 +253,14 @@ WHEN COUNT(*) > 4 THEN 'movimento médio'
 ELSE 'Movimento lento'
 END 'Análise do período'
 FROM leituraRegiaoFila
+<<<<<<< HEAD
 WHERE presenca <> 0;
 -- FAZER SELECT DO número individual por caixas 
 -- linha cinza
+=======
+WHERE presenca <> 0; -- não consegui encontrar na dash 
+
+>>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
 SELECT
  concat(AVG(presenca), corredor.identificacao) AS "Movimentação média"
 FROM leituraCorredor 
@@ -263,7 +268,7 @@ join sensor
 ON leituraCorredor.fk_idSensor = sensor.idSensor 
 JOIN corredor
 ON sensor.fk_idCorredor = corredor.idCorredor
-WHERE fk_idSensor = "9"; 
+WHERE fk_idSensor = "9";  -- está na dash mas a concatenação está incorreta (corredor)
 
 
   SELECT 
@@ -272,8 +277,12 @@ corredor.identificacao AS 'Corredor'
 FROM leituraCorredor 
 JOIN sensor ON leituraCorredor.fk_idSensor = sensor.idSensor 
 JOIN corredor ON sensor.fk_idCorredor = corredor.idCorredor 
+<<<<<<< HEAD
 WHERE fk_idSensor = "9";
 -- linha cinza
+=======
+WHERE fk_idSensor = "9"; -- precisa ser discutido média não se encaixa no contexto da dash 
+>>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
 
 SELECT 
 corredor.identificacao AS corredor,
@@ -285,5 +294,9 @@ JOIN sensor
  ON leituraCorredor.fk_idSensor = sensor.idSensor
  JOIN corredor 
  ON sensor.fk_idCorredor = corredor.idCorredor
+<<<<<<< HEAD
 WHERE presenca <> 0 AND fk_idSensor = '10';
 
+=======
+WHERE presenca <> 0 AND fk_idSensor = '10'; -- está na dash grafico superior direito (corredor)
+>>>>>>> dd3e5929b4c2652140db81392d0f882ae1e53607
