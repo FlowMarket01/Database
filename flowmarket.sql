@@ -224,7 +224,6 @@ INSERT INTO estadoFila (idCaixa, nivel, inicio, fim) VALUES
 (5, 'moderado', '2026-06-01 10:00:00', NULL);
 
 
-
 SELECT 
 estadoFila.idCaixa, 
 caixa.identificacao, 
