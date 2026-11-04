@@ -1,6 +1,7 @@
 CREATE DATABASE flowmarket;
 USE flowmarket;
 
+
 CREATE TABLE usuario (
     idUsuario     INT PRIMARY KEY AUTO_INCREMENT,
     nomeCompleto  VARCHAR(150) NOT NULL,
@@ -9,7 +10,7 @@ CREATE TABLE usuario (
     telefone      VARCHAR(11),
     Data_nasc     date
 );
-INSERT INTO USUARIO(nomeCompleto,email,senha,telefone,Data_nasc) VALUES 
+INSERT INTO usuario(nomeCompleto,email,senha,telefone,Data_nasc) VALUES 
 ("Antônio Cortez","antonio.cortez@gmail.com","jpnk_756d@13","55-07832154","1989-09-12"),
 ("Maria das Graças","maria.graca1967@gmail.com","bssrhwf%4vf","55-18467308","1967-04-25"),
 ("Gabriel Gomes","Gab_gomes@gmail.com","K#7xN!2wQ$9zL&4vM*1pB%8sT@5jF(","11-75090725","1989-11-20"),
