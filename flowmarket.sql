@@ -209,18 +209,18 @@ CREATE TABLE estadoFila (
     fim           DATETIME NULL,   -- nulo enquanto o nível está ativo
     FOREIGN KEY (idCaixa) REFERENCES caixa(idCaixa),
     CONSTRAINT chkFimAposInicio CHECK (fim IS NULL OR fim >= inicio),
-    CONSTRAINT chkNivel check (nivel in ("vazio","moderado","cheio"))
+    CONSTRAINT chkNivel check (nivel in ("leve","moderado","cheio"))
 );
 INSERT INTO estadoFila (idCaixa, nivel, inicio, fim) VALUES 
-(1, 'vazio', '2026-06-01 08:30:00', '2026-06-01 08:35:00'),
+(1, 'leve', '2026-06-01 08:30:00', '2026-06-01 08:35:00'),
 (1, 'moderado', '2026-06-01 08:40:00', '2026-06-01 08:45:00'),
-(2, 'vazio', '2026-06-01 08:50:00', '2026-06-01 08:55:00'),
+(2, 'leve', '2026-06-01 08:50:00', '2026-06-01 08:55:00'),
 (2, 'moderado', '2026-06-01 09:00:00', '2026-06-01 09:05:00'),
 (1, 'cheio', '2026-06-01 09:10:00', '2026-06-01 09:15:00'),
-(3, 'vazio', '2026-06-01 09:20:00', '2026-06-01 09:25:00'),
+(3, 'leve', '2026-06-01 09:20:00', '2026-06-01 09:25:00'),
 (3, 'moderado', '2026-06-01 09:30:00', '2026-06-01 09:35:00'),
 (4, 'cheio', '2026-06-01 09:40:00', '2026-06-01 09:45:00'),
-(5, 'vazio', '2026-06-01 09:50:00', '2026-06-01 09:55:00'),
+(5, 'leve', '2026-06-01 09:50:00', '2026-06-01 09:55:00'),
 (5, 'moderado', '2026-06-01 10:00:00', NULL);
 
 
@@ -237,7 +237,7 @@ WHEN nivel = "cheio" THEN concat(caixa.identificacao," ", estadoFila.nivel,
  FROM estadoFila AS estadoFila2 
  JOIN caixa AS caixa2 
  ON estadoFila2.idCaixa = caixa2.idCaixa 
- WHERE estadoFila2.nivel = "vazio" AND estadoFila2.inicio > '2026-06-01 09:39:00'))
+ WHERE estadoFila2.nivel = "leve" AND estadoFila2.inicio > '2026-06-01 09:39:00'))
 ELSE NULL
 end as ALERTA
 FROM estadoFila
