@@ -17,7 +17,7 @@ nome VARCHAR(45) NOT NULL
 CREATE TABLE mercado(
 id_mercado INT PRIMARY KEY AUTO_INCREMENT,
 cnpj CHAR(14) NOT NULL,
-razao_social VARCHAR(100) NOT NULL,
+razao_social VARCHAR(200) NOT NULL,
 nome_fantasia VARCHAR(100),
 fk_porte_mercado INT,
 fk_usuario INT,
@@ -28,18 +28,14 @@ FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario)
 CREATE TABLE caixa(
 id_caixa INT AUTO_INCREMENT,
 fk_caixa_mercado INT,
-descricao INT NOT NULL,
+descricao VARCHAR(75) NOT NULL,
 PRIMARY KEY(id_caixa, fk_caixa_mercado),
 FOREIGN KEY (fk_caixa_mercado) REFERENCES mercado(id_mercado)
 );
 
 CREATE TABLE regiao_fila(
 id_regiao INT PRIMARY KEY AUTO_INCREMENT,
-fk_caixa INT,
-fk_regiao_mercado INT,
-descricao VARCHAR(45) NOT NULL,
-FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa),
-FOREIGN KEY (fk_regiao_mercado) REFERENCES caixa(fk_caixa_mercado)
+descricao VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE status_sensor(
@@ -49,11 +45,15 @@ descricao VARCHAR(45)
 
 CREATE TABLE sensor(
 id_sensor INT PRIMARY KEY AUTO_INCREMENT,
-identificacao VARCHAR(100),
+identificacao VARCHAR(150),
 fk_status_sensor INT,
 fk_regiao_fila INT,
+fk_caixa INT,
+fk_mercado INT,
 FOREIGN KEY (fk_status_sensor) REFERENCES status_sensor(id_status),
-FOREIGN KEY (fk_regiao_fila) REFERENCES regiao_fila(id_regiao)
+FOREIGN KEY (fk_regiao_fila) REFERENCES regiao_fila(id_regiao),
+FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa),
+FOREIGN KEY (fk_mercado) REFERENCES caixa(fk_caixa_mercado)
 );
 
 CREATE TABLE leitura(
@@ -78,7 +78,7 @@ INSERT INTO porte_mercado(nome) VALUES
 ("Médio"),
 ("Pequeno");
 
-INSERT INTO mercado (cnpj, nome_fantasia, razaoSocial, fk_usuario, fk_porte_mercado) VALUES 
+INSERT INTO mercado (cnpj, nome_fantasia, razao_social, fk_usuario, fk_porte_mercado) VALUES 
 ("53303316000119", "Supermercado Sol e Mar", "Comércio de Alimentos Sol e Mar e Distribuidora de Produtos Hortifrutigranjeiros da Costa Litorânea Ltda.", 1, 1),
 ("30339128000145", "Hipermercado Preço Justo", "Preço Justo Hipermercados e Logística de Alimentos Perecíveis e Produtos de Limpeza Doméstica S.A.", 2, 2),
 ("77105916000130", "Minimercado do Bairro", "Minimercado e Mercearia do Bairro Conveniências, Panificação e Comércio de Bebidas em Geral Ltda.", 3, 3),
@@ -124,25 +124,24 @@ INSERT INTO caixa (fk_caixa_mercado, descricao) VALUES
 (6, 'caixa-4 atendimento idoso'),
 (6, 'caixa-5 separação ifood');
 
-INSERT INTO regiao_fila(fk_caixa, fk_regiao_mercado, descricao) VALUES 
-(1, );
+INSERT INTO regiao_fila(descricao) VALUES 
+("Região 1"),
+("Região 2"),
+("Região 3");
 
 INSERT INTO status_sensor(descricao) VALUES
-("Inativo"),
 ("Ativo"),
+("Inativo"),
 ("Em manutenção");
 
-INSERT INTO sensor (identificacao, fk_status_sensor, fk_regiao_fila) VALUES 
-("Sensor Caixa 1", 1, 1, NULL, 1),
-("Sensor Caixa 2", 1, 2, NULL, 2),
-("Sensor Caixa Preço Justo 1", 2, 6, NULL, 1),
-("Sensor Caixa Preço Justo 2", 2, 7, NULL, 3),
-("Sensor Minimercado Padaria", 3, 12, NULL, 2),
-("Sensor Hortifruti Caixa 1", 4, 16, NULL, 1),
-("Sensor Vale Verde Adega", 5, 22, NULL, 2),
-("Sensor Atacadão Pallets", 6, 26, NULL, 1),
-("Sensor Corredor Mercearia", 1, NULL, 1, NULL),
-("Sensor Corredor Bebidas", 1, NULL, 2, NULL);
+INSERT INTO sensor (identificacao, fk_status_sensor, fk_regiao_fila, fk_caixa, fk_mercado) VALUES 
+("Sensor Caixa 1 - 1", 1, 1, 1, 1),
+("Sensor Caixa 1 - 2", 1, 2, 1, 1),
+("Sensor Caixa 1 - 3", 1, 3, 1, 1),
+("Sensor Caixa 2 - 1", 3, 1, 2, 1),
+("Sensor Caixa 2 - 2", 1, 2, 2, 1),
+("Sensor Caixa 2 - 3", 1, 3, 2, 1);
+
 
 INSERT INTO leitura (fk_sensor, valor_leitura, data_leitura) VALUES 
 (1, 1, '2026-06-01 08:30:00'),
@@ -154,4 +153,6 @@ INSERT INTO leitura (fk_sensor, valor_leitura, data_leitura) VALUES
 (4, 0, '2026-06-01 09:00:00'),
 (4, 1, '2026-06-01 09:05:00'),
 (5, 1, '2026-06-01 09:10:00'),
-(5, 0, '2026-06-01 09:15:00');
+(5, 0, '2026-06-01 09:15:00'),
+(6, 0, '2026-06-01 09:20:00'),
+(6, 1, '2026-06-01 09:25:00');
