@@ -27,10 +27,19 @@ FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario)
 
 CREATE TABLE caixa(
 id_caixa INT AUTO_INCREMENT,
-fk_caixa_mercado INT,
+fk_mercado INT,
 descricao VARCHAR(75) NOT NULL,
-PRIMARY KEY(id_caixa, fk_caixa_mercado),
-FOREIGN KEY (fk_caixa_mercado) REFERENCES mercado(id_mercado)
+PRIMARY KEY(id_caixa, fk_mercado),
+FOREIGN KEY (fk_mercado) REFERENCES mercado(id_mercado)
+);
+
+CREATE TABLE alerta(
+id_alerta INT PRIMARY KEY AUTO_INCREMENT,
+fk_caixa INT,
+fk_mercado INT,
+data_alerta DATETIME,
+FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa),
+FOREIGN KEY (fk_mercado) REFERENCES caixa(fk_mercado)
 );
 
 CREATE TABLE regiao_fila(
@@ -53,7 +62,7 @@ fk_mercado INT,
 FOREIGN KEY (fk_status_sensor) REFERENCES status_sensor(id_status),
 FOREIGN KEY (fk_regiao_fila) REFERENCES regiao_fila(id_regiao),
 FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa),
-FOREIGN KEY (fk_mercado) REFERENCES caixa(fk_caixa_mercado)
+FOREIGN KEY (fk_mercado) REFERENCES caixa(fk_mercado)
 );
 
 CREATE TABLE leitura(
@@ -87,7 +96,7 @@ INSERT INTO mercado (cnpj, nome_fantasia, razao_social, fk_usuario, fk_porte_mer
 ("66859327000121", "Atacadão Pague Menos", "Pague Menos Comércio Atacadista e Varejista de Gêneros Alimentares e Utilidades Domésticas S.A.", 6, 3);
 
 
-INSERT INTO caixa (fk_caixa_mercado, descricao) VALUES
+INSERT INTO caixa (fk_mercado, descricao) VALUES
 (1, 'caixa-1 frente de loja'),
 (1, 'caixa-2 frente de loja'),
 (1, 'caixa-3 atendimento idoso'),
