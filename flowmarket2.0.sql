@@ -37,7 +37,8 @@ CREATE TABLE alerta(
 id_alerta INT PRIMARY KEY AUTO_INCREMENT,
 fk_caixa INT,
 fk_mercado INT,
-data_alerta DATETIME,
+data_alerta DATE DEFAULT (CURDATE()),
+duracao INT DEFAULT 0,
 FOREIGN KEY (fk_caixa) REFERENCES caixa(id_caixa),
 FOREIGN KEY (fk_mercado) REFERENCES caixa(fk_mercado)
 );
@@ -150,6 +151,12 @@ INSERT INTO sensor (identificacao, fk_status_sensor, fk_regiao_fila, fk_caixa, f
 ("Sensor Caixa 2 - 1", 3, 1, 2, 1),
 ("Sensor Caixa 2 - 2", 1, 2, 2, 1),
 ("Sensor Caixa 2 - 3", 1, 3, 2, 1);
+
+INSERT INTO alerta (fk_caixa, fk_mercado, data_alerta, duracao) VALUES
+(1, 1, DEFAULT, 5),
+(1, 1, '2026-10-25', 10);
+
+UPDATE alerta SET duracao = duracao + 5 WHERE id_alerta = 1;
 
 
 INSERT INTO leitura (fk_sensor, valor_leitura, data_leitura) VALUES 
